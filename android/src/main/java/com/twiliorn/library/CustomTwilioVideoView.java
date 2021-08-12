@@ -242,7 +242,7 @@ public class CustomTwilioVideoView extends View implements LifecycleEventListene
     // ===== SETUP =================================================================================
 
     private VideoFormat buildVideoFormat() {
-        return new VideoFormat(VideoDimensions.CIF_VIDEO_DIMENSIONS, 15);
+        return new VideoFormat(VideoDimensions.HD_720P_VIDEO_DIMENSIONS, 30);
     }
 
     private CameraCapturer createCameraCaputer(Context context, String cameraId) {
@@ -320,7 +320,7 @@ public class CustomTwilioVideoView extends View implements LifecycleEventListene
             return false;
         }
 
-        localVideoTrack = LocalVideoTrack.create(getContext(), enableVideo, cameraCapturer, buildVideoFormat());
+        localVideoTrack = LocalVideoTrack.create(getContext(), enableVideo, cameraCapturer, buildVideoFormat(), "camera-"+cameraType);
         if (thumbnailVideoView != null && localVideoTrack != null) {
             localVideoTrack.addSink(thumbnailVideoView);
         }
@@ -341,7 +341,7 @@ public class CustomTwilioVideoView extends View implements LifecycleEventListene
              * If the local video track was released when the app was put in the background, recreate.
              */
             if (cameraCapturer != null && localVideoTrack == null) {
-                localVideoTrack = LocalVideoTrack.create(getContext(), isVideoEnabled, cameraCapturer, buildVideoFormat());
+                localVideoTrack = LocalVideoTrack.create(getContext(), isVideoEnabled, cameraCapturer, buildVideoFormat(), "camera-"+cameraType);
             }
 
             if (localVideoTrack != null) {
