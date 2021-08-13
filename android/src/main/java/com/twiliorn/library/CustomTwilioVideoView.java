@@ -443,7 +443,7 @@ public class CustomTwilioVideoView extends View implements LifecycleEventListene
         this.cameraType = cameraType;
 
         // Share your microphone
-        localAudioTrack = LocalAudioTrack.create(getContext(), enableAudio);
+        localAudioTrack = LocalAudioTrack.create(getContext(), true);
 
         if (cameraCapturer == null && enableVideo) {
             boolean createVideoStatus = createLocalVideo(enableVideo, cameraType);
@@ -456,8 +456,9 @@ public class CustomTwilioVideoView extends View implements LifecycleEventListene
             isVideoEnabled = false;
         }
 
-        setAudioFocus(enableAudio);
+        setAudioFocus(true);
         connectToRoom();
+        localAudioTrack.enable(false);
     }
 
     public void connectToRoom() {
@@ -680,20 +681,28 @@ public class CustomTwilioVideoView extends View implements LifecycleEventListene
     }
 
     public void publishLocalVideo(boolean enabled) {
-        if (localParticipant != null && localVideoTrack != null) {
+        if (localParticipant != null) {
             if (enabled) {
+                if (localVideoTrack == null) {
+                    createLocalVideo(true, CustomTwilioVideoView.FRONT_CAMERA_TYPE);
+                }
                 localParticipant.publishTrack(localVideoTrack);
-            } else {
+            } else if (localVideoTrack != null) {
                 localParticipant.unpublishTrack(localVideoTrack);
             }
         }
     }
 
     public void publishLocalAudio(boolean enabled) {
-        if (localParticipant != null && localAudioTrack != null) {
+        if (localParticipant != null) {
             if (enabled) {
+                if (localAudioTrack == null) {
+                    localAudioTrack = LocalAudioTrack.create(getContext(), true);
+                    localAudioTrack.enable(true);
+                }
                 localParticipant.publishTrack(localAudioTrack);
-            } else {
+                setAudioFocus(true);
+            } else if (localAudioTrack != null) {
                 localParticipant.unpublishTrack(localAudioTrack);
             }
         }
