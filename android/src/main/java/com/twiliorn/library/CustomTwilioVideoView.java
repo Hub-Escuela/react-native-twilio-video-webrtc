@@ -242,7 +242,7 @@ public class CustomTwilioVideoView extends View implements LifecycleEventListene
     // ===== SETUP =================================================================================
 
     private VideoFormat buildVideoFormat() {
-        return new VideoFormat(VideoDimensions.HD_720P_VIDEO_DIMENSIONS, 30);
+        return new VideoFormat(VideoDimensions.WVGA_VIDEO_DIMENSIONS, 25);
     }
 
     private CameraCapturer createCameraCaputer(Context context, String cameraId) {
